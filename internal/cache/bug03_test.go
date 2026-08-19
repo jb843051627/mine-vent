@@ -7,7 +7,7 @@ import (
 	"mine-vent/internal/model"
 )
 
-func TestBug03_ConcurrentCacheUpdateDataRace(t *testing.T) {
+func TestMV03_ConcurrentCacheUpdateDataRace(t *testing.T) {
 	rc := NewReadingCache()
 
 	var wg sync.WaitGroup
