@@ -96,7 +96,9 @@ func (as *AlertStore) ListBySensor(sensorID string, limit int) ([]*model.Alert, 
 
 func (as *AlertStore) ListByArea(areaID string) ([]*model.Alert, error) {
 	if cached, ok := as.cache[areaID]; ok && len(cached) > 0 {
-		return cached, nil
+		out := make([]*model.Alert, len(cached))
+		copy(out, cached)
+		return out, nil
 	}
 	rows, err := as.db.Query(
 		`SELECT id, sensor_id, fan_id, level, status, title, message, value, threshold, triggered_at, acked_at, acked_by, resolved_at, area_id FROM alerts WHERE area_id = ? ORDER BY triggered_at DESC`,
@@ -115,7 +117,9 @@ func (as *AlertStore) ListByArea(areaID string) ([]*model.Alert, error) {
 		alerts = append(alerts, &a)
 	}
 	as.cache[areaID] = alerts
-	return alerts, nil
+	out := make([]*model.Alert, len(alerts))
+	copy(out, alerts)
+	return out, nil
 }
 
 func (as *AlertStore) Acknowledge(id, ackedBy string) error {
