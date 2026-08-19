@@ -9,7 +9,7 @@ import (
 	"mine-vent/internal/store"
 )
 
-func TestBug08_GenerateHealthReportPollutesStore(t *testing.T) {
+func TestMV08_GenerateHealthReportPollutesStore(t *testing.T) {
 	dbPath := filepath.Join(t.TempDir(), "test.db")
 	s, err := store.NewStore(dbPath)
 	if err != nil {
