@@ -44,8 +44,14 @@ func (svc *ReadingService) RecordReading(reading *model.Reading) error {
 }
 
 func (svc *ReadingService) BatchIngest(ctx context.Context, batch *model.ReadingBatch) (int, error) {
+	if batch == nil || len(batch.Readings) == 0 {
+		return 0, fmt.Errorf("batch is empty")
+	}
 	processed := 0
 	for _, reading := range batch.Readings {
+		if err := ctx.Err(); err != nil {
+			return processed, fmt.Errorf("batch ingest cancelled: %w", err)
+		}
 		sensor, err := svc.sensorStore.GetByID(reading.SensorID)
 		if err != nil {
 			continue
