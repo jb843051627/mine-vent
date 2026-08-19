@@ -9,7 +9,7 @@ import (
 	"mine-vent/internal/store"
 )
 
-func TestBug09_ActivateScheduleErrorShadowing(t *testing.T) {
+func TestMV09_ActivateScheduleErrorShadowing(t *testing.T) {
 	dbPath := filepath.Join(t.TempDir(), "test.db")
 	s, err := store.NewStore(dbPath)
 	if err != nil {
