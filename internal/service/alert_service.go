@@ -51,11 +51,10 @@ func (svc *AlertService) CheckThresholds(areaID string) ([]*model.Alert, error) 
 		if err != nil {
 			continue
 		}
-		readings := make([]*model.Alert, len(alerts))
-		copy(readings, alerts)
-		sort.Slice(readings, func(i, j int) bool {
-			return readings[i].TriggeredAt.Before(readings[j].TriggeredAt)
+		sort.Slice(alerts, func(i, j int) bool {
+			return alerts[i].TriggeredAt.Before(alerts[j].TriggeredAt)
 		})
+		readings := alerts
 		for _, a := range readings {
 			if a.Status == model.AlertStatusActive && sensor.MaxThreshold > 0 {
 				if a.Value > sensor.MaxThreshold {
