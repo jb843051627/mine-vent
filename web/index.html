@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>矿井通风监测系统</title>
+    <link rel="stylesheet" href="/web/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <h1>矿井通风监测调度系统</h1>
+        <div class="nav-links">
+            <a href="/web/index.html">首页</a>
+            <a href="/web/dashboard.html">仪表盘</a>
+            <a href="/web/sensors.html">传感器</a>
+            <a href="/web/alerts.html">告警</a>
+        </div>
+    </nav>
+    <main class="container">
+        <div class="welcome">
+            <h2>系统概览</h2>
+            <div id="overview-stats" class="stats-grid">
+                <div class="stat-card">
+                    <h3>传感器</h3>
+                    <p id="sensor-count">--</p>
+                </div>
+                <div class="stat-card">
+                    <h3>风机</h3>
+                    <p id="fan-count">--</p>
+                </div>
+                <div class="stat-card alert">
+                    <h3>活跃告警</h3>
+                    <p id="alert-count">--</p>
+                </div>
+                <div class="stat-card">
+                    <h3>待维护</h3>
+                    <p id="maint-count">--</p>
+                </div>
+            </div>
+            <div class="actions">
+                <a href="/web/dashboard.html" class="btn">查看仪表盘</a>
+            </div>
+        </div>
+    </main>
+    <script src="/web/app.js"></script>
+</body>
+</html>

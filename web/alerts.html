@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>告警 - 矿井通风监测系统</title>
+    <link rel="stylesheet" href="/web/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <h1>矿井通风监测调度系统</h1>
+        <div class="nav-links">
+            <a href="/web/index.html">首页</a>
+            <a href="/web/dashboard.html">仪表盘</a>
+            <a href="/web/sensors.html">传感器</a>
+            <a href="/web/alerts.html">告警</a>
+        </div>
+    </nav>
+    <main class="container">
+        <h2>活跃告警</h2>
+        <table id="alert-table">
+            <thead>
+                <tr><th>ID</th><th>级别</th><th>标题</th><th>值</th><th>阈值</th><th>触发时间</th></tr>
+            </thead>
+            <tbody id="alert-list"></tbody>
+        </table>
+    </main>
+    <script src="/web/app.js"></script>
+    <script>
+        loadAlerts();
+    </script>
+</body>
+</html>
