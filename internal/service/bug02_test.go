@@ -28,8 +28,10 @@ func TestBug02_CheckThresholdsPollutesCache(t *testing.T) {
 	}
 	ss.Create(sensor)
 
+	// Create alerts in REVERSE chronological order (newest first)
+	// so that sorting by TriggeredAt ascending would change the order
 	now := time.Now()
-	for i := 0; i < 3; i++ {
+	for i := 2; i >= 0; i-- {
 		as.Create(&model.Alert{
 			SensorID: "sensor-a", AreaID: "area-1",
 			Level: model.AlertLevelWarning, Status: model.AlertStatusActive,
