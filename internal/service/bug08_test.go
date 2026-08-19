@@ -22,10 +22,12 @@ func TestBug08_GenerateHealthReportPollutesStore(t *testing.T) {
 	rs := store.NewReadingStore(s)
 	svc := NewFanService(fs, ms, rs)
 
+	// Create fans with different statuses so sorting by status changes order
+	statuses := []model.FanStatus{model.FanStatusRunning, model.FanStatusStopped, model.FanStatusFault}
 	for i, name := range []string{"fan-a", "fan-b", "fan-c"} {
 		fs.Create(&model.Fan{
 			ID: name, Name: "Fan " + name, AreaID: "area-1",
-			Capacity: 5000, Status: model.FanStatusRunning,
+			Capacity: 5000, Status: statuses[i],
 			PowerKW: 75, InstalledAt: time.Now(), LastServiceAt: time.Now(),
 			IsActive: true, CurrentRPM: i * 100,
 		})
