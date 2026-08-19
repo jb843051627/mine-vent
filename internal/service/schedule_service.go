@@ -92,6 +92,9 @@ func (svc *ScheduleService) AssignFan(scheduleID, fanID string) error {
 	if err != nil {
 		return fmt.Errorf("fan not found: %w", err)
 	}
+	if fan == nil {
+		return fmt.Errorf("fan %s not found", fanID)
+	}
 	if fan.Status == model.FanStatusFault {
 		return fmt.Errorf("cannot assign fault fan to schedule")
 	}
