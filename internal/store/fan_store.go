@@ -46,7 +46,7 @@ func (fs *FanStore) GetByID(id string) (*model.Fan, error) {
 	var isActive int
 	err := row.Scan(&fan.ID, &fan.Name, &fan.AreaID, &fan.Capacity, &fan.CurrentRPM, &fan.Status, &fan.PowerKW, &fan.InstalledAt, &fan.LastServiceAt, &isActive)
 	if err == sql.ErrNoRows {
-		return nil, nil
+		return nil, ErrFanNotFound
 	}
 	if err != nil {
 		return nil, fmt.Errorf("get fan: %w", err)
