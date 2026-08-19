@@ -69,7 +69,9 @@ func (svc *ScheduleService) ActivateSchedule(id string) error {
 	if schedule.Status != model.ScheduleStatusDraft && schedule.Status != model.ScheduleStatusPaused {
 		return fmt.Errorf("cannot activate schedule in status %s", schedule.Status)
 	}
-	_ = svc.validateSchedule(schedule)
+	if err := svc.validateSchedule(schedule); err != nil {
+		return fmt.Errorf("validate schedule: %w", err)
+	}
 	fan, err := svc.fanStore.GetByID(schedule.FanID)
 	if err != nil {
 		return fmt.Errorf("fan not found: %w", err)
