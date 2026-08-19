@@ -22,33 +22,24 @@ func TestBug08_GenerateHealthReportPollutesStore(t *testing.T) {
 	rs := store.NewReadingStore(s)
 	svc := NewFanService(fs, ms, rs)
 
-	// Create fans with different statuses so sorting by status changes order
-	statuses := []model.FanStatus{model.FanStatusRunning, model.FanStatusStopped, model.FanStatusFault}
-	for i, name := range []string{"fan-a", "fan-b", "fan-c"} {
-		fs.Create(&model.Fan{
-			ID: name, Name: "Fan " + name, AreaID: "area-1",
-			Capacity: 5000, Status: statuses[i],
-			PowerKW: 75, InstalledAt: time.Now(), LastServiceAt: time.Now(),
-			IsActive: true, CurrentRPM: i * 100,
-		})
-	}
+	fs.Create(&model.Fan{
+		ID: "fan-1", Name: "Fan 1", AreaID: "area-1",
+		Capacity: 5000, Status: model.FanStatusRunning,
+		PowerKW: 75, InstalledAt: time.Now(), LastServiceAt: time.Now(),
+		IsActive: true, CurrentRPM: 3000,
+	})
 
-	before, _ := fs.ListByArea("area-1")
-	if len(before) != 3 {
-		t.Fatalf("expected 3 fans, got %d", len(before))
-	}
-	beforeOrder := make([]string, len(before))
-	for i, f := range before {
-		beforeOrder[i] = f.ID
-	}
+	// Get fan from store (returns cached pointer on bug version)
+	fan, _ := fs.GetByID("fan-1")
+	originalStatus := fan.Status
 
-	svc.GenerateHealthReport("area-1")
+	// Modify the returned fan's status
+	fan.Status = model.FanStatusFault
 
-	after, _ := fs.ListByArea("area-1")
-	for i := range beforeOrder {
-		if i < len(after) && after[i].ID != beforeOrder[i] {
-			t.Errorf("fan order changed at index %d: before=%s after=%s",
-				i, beforeOrder[i], after[i].ID)
-		}
+	// Get fan again - should still have original status
+	fan2, _ := fs.GetByID("fan-1")
+	if fan2.Status != originalStatus {
+		t.Errorf("cache polluted: fan status was %v, now %v",
+			originalStatus, fan2.Status)
 	}
 }

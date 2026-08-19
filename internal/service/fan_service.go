@@ -172,8 +172,8 @@ func (svc *FanService) GenerateHealthReport(areaID string) ([]*model.FanHealth, 
 		}
 		report = append(report, health)
 	}
-	sort.Slice(fans, func(i, j int) bool {
-		return fans[i].Status > fans[j].Status
+	sort.Slice(report, func(i, j int) bool {
+		return report[i].HealthScore < report[j].HealthScore
 	})
 	return report, nil
 }
