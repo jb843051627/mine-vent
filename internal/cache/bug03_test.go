@@ -29,7 +29,7 @@ func TestBug03_ConcurrentCacheUpdateDataRace(t *testing.T) {
 	}
 	wg.Wait()
 
-	r := rc.Get("sensor-1")
+	r, _ := rc.Get("sensor-1")
 	if r == nil {
 		t.Error("expected non-nil reading after updates")
 	}
