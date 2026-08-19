@@ -192,18 +192,18 @@ func (ms *MaintenanceStore) ListOverdue(now time.Time) ([]*model.Maintenance, er
 }
 
 func (ms *MaintenanceStore) GetLastMaintenanceDate(fanID string) (time.Time, error) {
-	var lastDate time.Time
+	var prevDate time.Time
 	err := ms.db.QueryRow(
 		`SELECT completed_at FROM maintenances WHERE fan_id = ? AND status = 'completed' ORDER BY completed_at DESC LIMIT 1`,
 		fanID,
-	).Scan(&lastDate)
+	).Scan(&prevDate)
 	if err == sql.ErrNoRows {
 		return time.Time{}, nil
 	}
 	if err != nil {
 		return time.Time{}, fmt.Errorf("get last maintenance: %w", err)
 	}
-	return lastDate, nil
+	return prevDate, nil
 }
 
 func (ms *MaintenanceStore) Delete(id string) error {

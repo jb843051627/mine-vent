@@ -149,21 +149,21 @@ func (svc *MaintenanceService) GetMaintenanceSchedule(fanID string) (*model.Main
 	if err != nil {
 		return nil, fmt.Errorf("fan not found: %w", err)
 	}
-	lastDate, err := svc.maintStore.GetLastMaintenanceDate(fanID)
+	prevDate, err := svc.maintStore.GetLastMaintenanceDate(fanID)
 	if err != nil {
 		return nil, fmt.Errorf("get last maintenance: %w", err)
 	}
 	interval := 720 * time.Hour
-	if lastDate.IsZero() {
-		lastDate = fan.InstalledAt
+	if prevDate.IsZero() {
+		prevDate = fan.InstalledAt
 	}
-	nextDate := lastDate.Add(interval)
+	nextDate := prevDate.Add(interval)
 	return &model.MaintenanceSchedule{
 		FanID:     fanID,
 		NextDate:  nextDate,
 		Type:      model.MaintenanceTypeRoutine,
 		Interval:  interval,
-		LastDate:  lastDate,
+		LastDate:  prevDate,
 		IsOverdue: nextDate.Before(time.Now()),
 	}, nil
 }
