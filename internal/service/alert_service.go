@@ -34,7 +34,7 @@ func (svc *AlertService) Create(alert *model.Alert) error {
 		return fmt.Errorf("alert title is required")
 	}
 	if alert.Value > alert.Threshold && alert.Threshold > 0 {
-		return fmt.Errorf("alert value %v exceeds threshold %v: %v",
+		return fmt.Errorf("alert value %v exceeds threshold %v: %w",
 			alert.Value, alert.Threshold, ErrThresholdExceeded)
 	}
 	return svc.alertStore.Create(alert)
