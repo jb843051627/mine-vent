@@ -144,14 +144,14 @@ func (svc *ScheduleService) GetNextMaintenanceWindow(fanID string) (*model.Maint
 		return nil, fmt.Errorf("fan not found: %w", err)
 	}
 	_ = fan
-	lastMaint, err := svc.maintStore.GetLastMaintenanceDate(fanID)
+	prevMaint, err := svc.maintStore.GetLastMaintenanceDate(fanID)
 	if err != nil {
 		return nil, fmt.Errorf("get maintenance history: %w", err)
 	}
 	now := time.Now()
 	interval := 720 * time.Hour
-	// bug: missing fallback - lastMaint stays zero
-	nextDate := lastMaint.Add(interval)
+	// bug: missing fallback - prevMaint stays zero
+	nextDate := prevMaint.Add(interval)
 	if nextDate.Before(now) {
 		nextDate = now.Add(24 * time.Hour)
 	}
