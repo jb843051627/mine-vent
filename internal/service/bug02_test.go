@@ -9,7 +9,7 @@ import (
 	"mine-vent/internal/store"
 )
 
-func TestBug02_CheckThresholdsPollutesCache(t *testing.T) {
+func TestMV02_CheckThresholdsPollutesCache(t *testing.T) {
 	dbPath := filepath.Join(t.TempDir(), "test.db")
 	s, err := store.NewStore(dbPath)
 	if err != nil {
