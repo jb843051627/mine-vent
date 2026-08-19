@@ -117,7 +117,9 @@ func (as *AlertStore) ListByArea(areaID string) ([]*model.Alert, error) {
 		alerts = append(alerts, &a)
 	}
 	as.cache[areaID] = alerts
-	return alerts, nil
+	result := make([]*model.Alert, len(alerts))
+	copy(result, alerts)
+	return result, nil
 }
 
 func (as *AlertStore) Acknowledge(id, ackedBy string) error {
