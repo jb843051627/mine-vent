@@ -139,5 +139,8 @@ func (svc *AlertService) Suppress(id, reason string) error {
 	}
 	alert.Status = model.AlertStatusSuppressed
 	alert.Message = fmt.Sprintf("%s [suppressed: %s]", alert.Message, reason)
-	return svc.alertStore.UpdateStatus(id, alert.Status)
+	if err := svc.alertStore.UpdateStatus(id, alert.Status); err != nil {
+		return fmt.Errorf("update alert status: %w", err)
+	}
+	return nil
 }
