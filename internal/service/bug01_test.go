@@ -10,7 +10,7 @@ import (
 	"mine-vent/internal/store"
 )
 
-func TestBug01_RecordReadingNilSensorPanics(t *testing.T) {
+func TestMV01_RecordReadingNilSensorPanics(t *testing.T) {
 	dbPath := filepath.Join(t.TempDir(), "test.db")
 	s, err := store.NewStore(dbPath)
 	if err != nil {
