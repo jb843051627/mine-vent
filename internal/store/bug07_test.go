@@ -8,7 +8,7 @@ import (
 	"mine-vent/internal/model"
 )
 
-func TestBug07_BatchCreatePartialCommitOnFailure(t *testing.T) {
+func TestMV07_BatchCreatePartialCommitOnFailure(t *testing.T) {
 	dbPath := filepath.Join(t.TempDir(), "test.db")
 	s, err := NewStore(dbPath)
 	if err != nil {
