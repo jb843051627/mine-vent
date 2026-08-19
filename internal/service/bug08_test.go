@@ -21,6 +21,7 @@ func TestMV08_GenerateHealthReportPollutesStore(t *testing.T) {
 	ms := store.NewMaintenanceStore(s)
 	rs := store.NewReadingStore(s)
 	svc := NewFanService(fs, ms, rs)
+	_ = svc
 
 	fs.Create(&model.Fan{
 		ID: "fan-1", Name: "Fan 1", AreaID: "area-1",

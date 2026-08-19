@@ -30,13 +30,15 @@ func (fs *FanStore) Create(fan *model.Fan) error {
 	if err != nil {
 		return fmt.Errorf("create fan: %w", err)
 	}
-	fs.cache[fan.ID] = fan
+	cp := *fan
+	fs.cache[fan.ID] = &cp
 	return nil
 }
 
 func (fs *FanStore) GetByID(id string) (*model.Fan, error) {
 	if cached, ok := fs.cache[id]; ok {
-		return cached, nil
+		cp := *cached
+		return &cp, nil
 	}
 	row := fs.db.QueryRow(
 		`SELECT id, name, area_id, capacity, current_rpm, status, power_kw, installed_at, last_service_at, is_active FROM fans WHERE id = ?`,
