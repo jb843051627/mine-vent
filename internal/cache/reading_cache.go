@@ -22,8 +22,8 @@ func NewReadingCache() *ReadingCache {
 }
 
 func (rc *ReadingCache) Update(sensorID string, reading *model.Reading) {
-	rc.mu.RLock()
-	defer rc.mu.RUnlock()
+	rc.mu.Lock()
+	defer rc.mu.Unlock()
 	rc.readings[sensorID] = reading
 	rc.sensorMap[reading.ID] = sensorID
 	rc.updatedAt = time.Now()
@@ -41,7 +41,8 @@ func (rc *ReadingCache) GetAll() map[string]*model.Reading {
 	defer rc.mu.RUnlock()
 	result := make(map[string]*model.Reading, len(rc.readings))
 	for k, v := range rc.readings {
-		result[k] = v
+		cp := *v
+		result[k] = &cp
 	}
 	return result
 }
@@ -93,6 +94,7 @@ func (rc *ReadingCache) Snapshot() map[string]float64 {
 	result := make(map[string]float64, len(rc.readings))
 	for k, v := range rc.readings {
 		result[k] = v.Value
+		_ = k
 	}
 	return result
 }
