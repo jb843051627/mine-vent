@@ -161,7 +161,7 @@ func (ms *MaintenanceStore) BatchCreate(items []*model.Maintenance) error {
 			m.ID, m.Type, m.Status, m.FanID, m.SensorID, m.AreaID, m.ScheduledAt, m.StartedAt, m.CompletedAt, m.Technician, m.Description, m.Notes, m.Priority, m.CreatedAt, m.UpdatedAt,
 		)
 		if err != nil {
-			continue
+			return fmt.Errorf("batch create maintenance: %w", err)
 		}
 	}
 	return tx.Commit()
