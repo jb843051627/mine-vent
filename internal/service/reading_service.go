@@ -135,7 +135,7 @@ func (svc *ReadingService) GetReadingStats(areaID string) (*model.ReadingStats, 
 		ActiveSensors: len(sensors),
 	}
 	totalReadings := 0
-	var lastUpdate time.Time
+	var prevUpdate time.Time
 	for _, s := range sensors {
 		count, err := svc.readingStore.CountBySensor(s.ID)
 		if err != nil {
@@ -143,13 +143,13 @@ func (svc *ReadingService) GetReadingStats(areaID string) (*model.ReadingStats, 
 		}
 		totalReadings += count
 		if r, err := svc.readingStore.GetLatestBySensor(s.ID); err == nil && r != nil {
-			if r.Timestamp.After(lastUpdate) {
-				lastUpdate = r.Timestamp
+			if r.Timestamp.After(prevUpdate) {
+				prevUpdate = r.Timestamp
 			}
 		}
 	}
 	stats.TotalReadings = totalReadings
-	stats.LastUpdate = lastUpdate
+	stats.LastUpdate = prevUpdate
 	return stats, nil
 }
 

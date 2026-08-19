@@ -129,9 +129,9 @@ func (svc *FanService) EvaluateFanHealth(fanID string) (*model.FanHealth, error)
 	if fan.Capacity > 0 {
 		health.Efficiency = float64(fan.CurrentRPM) / fan.Capacity
 	}
-	lastMaint, err := svc.maintStore.GetLastMaintenanceDate(fanID)
-	if err == nil && !lastMaint.IsZero() {
-		hours := time.Since(lastMaint).Hours()
+	prevMaint, err := svc.maintStore.GetLastMaintenanceDate(fanID)
+	if err == nil && !prevMaint.IsZero() {
+		hours := time.Since(prevMaint).Hours()
 		health.UptimeHours = hours
 		if hours > 720 {
 			health.NeedsService = true
