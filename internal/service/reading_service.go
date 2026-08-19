@@ -29,9 +29,6 @@ func (svc *ReadingService) RecordReading(reading *model.Reading) error {
 	if err != nil {
 		return fmt.Errorf("get sensor: %w", err)
 	}
-	if sensor == nil {
-		return fmt.Errorf("sensor %s not found", reading.SensorID)
-	}
 	reading.Unit = sensor.Unit
 	if reading.Timestamp.IsZero() {
 		reading.Timestamp = time.Now()

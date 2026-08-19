@@ -49,7 +49,7 @@ func (ss *SensorStore) GetByID(id string) (*model.Sensor, error) {
 	var isActive int
 	err := row.Scan(&sensor.ID, &sensor.Name, &sensor.Type, &sensor.Direction, &sensor.Location, &sensor.AreaID, &sensor.Unit, &sensor.MinThreshold, &sensor.MaxThreshold, &isActive, &sensor.CreatedAt, &sensor.UpdatedAt)
 	if err == sql.ErrNoRows {
-		return nil, ErrSensorNotFound
+		return nil, nil
 	}
 	if err != nil {
 		return nil, fmt.Errorf("get sensor: %w", err)
