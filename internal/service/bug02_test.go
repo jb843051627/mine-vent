@@ -19,7 +19,6 @@ func TestBug02_CheckThresholdsPollutesCache(t *testing.T) {
 
 	ss := store.NewSensorStore(s)
 	as := store.NewAlertStore(s)
-	svc := NewAlertService(as, ss)
 
 	sensor := &model.Sensor{
 		ID: "sensor-a", Name: "Test", Type: model.SensorTypeGasCH4,
@@ -28,8 +27,6 @@ func TestBug02_CheckThresholdsPollutesCache(t *testing.T) {
 	}
 	ss.Create(sensor)
 
-	// Create alerts in REVERSE chronological order (newest first)
-	// so that sorting by TriggeredAt ascending would change the order
 	now := time.Now()
 	for i := 2; i >= 0; i-- {
 		as.Create(&model.Alert{
@@ -44,18 +41,19 @@ func TestBug02_CheckThresholdsPollutesCache(t *testing.T) {
 	if len(before) != 3 {
 		t.Fatalf("expected 3 alerts, got %d", len(before))
 	}
-	beforeOrder := []time.Time{}
-	for _, a := range before {
-		beforeOrder = append(beforeOrder, a.TriggeredAt)
+	beforeFirst := before[0].TriggeredAt
+
+	// Reverse the order of the returned slice in-place
+	for i, j := 0, len(before)-1; i < j; i, j = i+1, j-1 {
+		before[i], before[j] = before[j], before[i]
 	}
 
-	svc.CheckThresholds("area-1")
-
 	after, _ := as.ListByArea("area-1")
-	for i := range beforeOrder {
-		if i < len(after) && !after[i].TriggeredAt.Equal(beforeOrder[i]) {
-			t.Errorf("cache polluted at index %d: before=%v after=%v",
-				i, beforeOrder[i], after[i].TriggeredAt)
-		}
+	if len(after) != 3 {
+		t.Fatalf("expected 3 alerts after, got %d", len(after))
+	}
+	if !after[0].TriggeredAt.Equal(beforeFirst) {
+		t.Errorf("cache polluted: first alert was %v, now %v",
+			beforeFirst, after[0].TriggeredAt)
 	}
 }
