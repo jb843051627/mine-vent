@@ -74,7 +74,10 @@ func (svc *ScheduleService) ActivateSchedule(id string) error {
 	}
 	fan, err := svc.fanStore.GetByID(schedule.FanID)
 	if err != nil {
-		return fmt.Errorf("fan not found: %w", err)
+		return fmt.Errorf("fan %s not found: %w", schedule.FanID, err)
+	}
+	if fan == nil {
+		return fmt.Errorf("fan %s is nil after lookup", schedule.FanID)
 	}
 	if fan.Status == model.FanStatusFault {
 		return fmt.Errorf("cannot assign schedule to fan in fault state")
