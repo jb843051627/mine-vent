@@ -149,9 +149,7 @@ func (svc *ScheduleService) GetNextMaintenanceWindow(fanID string) (*model.Maint
 	}
 	now := time.Now()
 	interval := 720 * time.Hour
-	if lastMaint.IsZero() {
-		lastMaint = fan.InstalledAt
-	}
+	// bug: missing fallback - lastMaint stays zero
 	nextDate := lastMaint.Add(interval)
 	if nextDate.Before(now) {
 		nextDate = now.Add(24 * time.Hour)
