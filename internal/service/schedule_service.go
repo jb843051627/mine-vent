@@ -143,6 +143,7 @@ func (svc *ScheduleService) GetNextMaintenanceWindow(fanID string) (*model.Maint
 	if err != nil {
 		return nil, fmt.Errorf("fan not found: %w", err)
 	}
+	_ = fan
 	lastMaint, err := svc.maintStore.GetLastMaintenanceDate(fanID)
 	if err != nil {
 		return nil, fmt.Errorf("get maintenance history: %w", err)
